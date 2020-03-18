@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Detail extends React.Component{
     constructor(props){
@@ -19,22 +21,34 @@ class Detail extends React.Component{
                 })
             })
     }
+    handleArti = () => {
+        this.setState({
+            visible: true
+        })
+    }
+    handleShow = () => {
+        this.setState({
+            visible: false
+        })
+    }
     render(){
+        console.log(this.props)
         const { dataAyat } = this.state
         if(this.state.loading === false){
             return <h1>LOADING ....</h1>
         }
         return(
             <div>
+                <Link to="/setting">SETTING</Link>
                 {
                     dataAyat.map((data) => {
                         return(
                             <table class="responsive-table">
                                 <tr>
-                                    <td>{data.ar}</td>
+                                    <td><font size={this.props.angka}>{data.ar}</font></td>
                                 </tr>
                                 <tr>
-                                    <td>{data.id}</td>
+                                    <td className={this.props.visible ? "hide" : ""}>{data.id}</td>
                                 </tr>
                             </table>
                         )
@@ -45,4 +59,10 @@ class Detail extends React.Component{
     }
 }
 
-export default Detail
+const globalState = state => ({
+    angka: state.angka,
+    visible: state.visible
+})
+
+
+export default connect(globalState,null)(Detail);
